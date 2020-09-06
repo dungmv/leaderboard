@@ -8,8 +8,9 @@ const errorFormat = (e) => {
 }
 
 router.get('/', async (req, res, next) => {
-  const client = new MongoClient.connect(config.db.uri, { useUnifiedTopology: true });
+  const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
   try {
+    await client.connect();
     const database = client.db('leaderboards');
     const collection = database.collection('leaderboards');
     const cursor = collection.find({});
@@ -47,9 +48,11 @@ router.post('/:id', async (req, res, next) => {
     const leaderboardId = new ObjectID(req.params.id);
     const userId = req.body.userId;
     const score = parseInt(req.body.score);
+    const name = parseInt(req.body.name);
+    const photo = parseInt(req.body.photo);
     await collection.updateOne(
       { lbid: leaderboardId, user_id: userId },
-      { $set: {score, user_id: userId, updated_at: new Date()} },
+      { $set: {score, player_name: name, photo, user_id: userId, updated_at: new Date()} },
       { upsert: true }
     );
     res.json({ err: 0, msg: 'ok' });
@@ -67,7 +70,7 @@ router.get('/:id', async (req, res, next) => {
     const database = client.db('leaderboards');
     const collection = database.collection('records');
     const leaderboardId = new ObjectID(req.params.id);
-    const cursor = collection.find({ lbid: leaderboardId });
+    const cursor = collection.find({ lbid: leaderboardId }).limit(25);
     const records = await cursor.toArray();
     res.json({ err: 0, msg: 'ok', entries: records });
   } catch (e) {
