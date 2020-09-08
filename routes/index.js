@@ -52,7 +52,7 @@ router.post('/:id', async (req, res, next) => {
     const photo = req.body.photo;
     await collection.updateOne(
       { lbid: leaderboardId, user_id: userId },
-      { $set: {score, player_name: name, photo, user_id: userId, updated_at: new Date()} },
+      { $set: {score, username: name, photo, user_id: userId, updated_at: new Date()} },
       { upsert: true }
     );
     res.json({ err: 0, msg: 'ok' });
