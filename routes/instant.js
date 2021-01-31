@@ -36,7 +36,7 @@ router.post('/:gameId',async (req, res, next)=>{
           res.json({ err: 0, msg: 'ok', entries: records });
       } else {
           console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-          res.json({ err: 1, msg: errorFormat(e) });
+          res.json({ err: 1, msg: errorFormat(err) });
       }
   });
 });
