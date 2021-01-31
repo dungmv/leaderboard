@@ -47,7 +47,7 @@ router.get('/:gameId',async (req, res, next)=>{
 
 });
 router.get('/getBestScore/:gameId',async (req, res, next)=>{
-  let playerId = req.params.PlayerId;
+  let playerId = req.body.PlayerId;
   let gameId = req.params.gameId;
   var params = {
     TableName : gameId,
