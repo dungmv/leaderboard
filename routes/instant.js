@@ -51,9 +51,9 @@ router.get('/getBestScore/:gameId',async (req, res, next)=>{
   let gameId = req.params.gameId;
   var params = {
     TableName : gameId,
-    KeyConditionExpression: "#p = :playid",
+    KeyConditionExpression: "#PlayerId = :playid",
     ExpressionAttributeNames:{
-        "#y": "Player"
+        "#PlayerId": "PlayerId"
     },
     ExpressionAttributeValues: {
         ":playid": playerId
