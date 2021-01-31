@@ -80,10 +80,10 @@ router.get('/getLeaderBoard/:gameId',async (req,res,next)=>{
     });
     // console.log('a ',Object.keys(obSearch).toString());
     // console.log('b ',obSearch);
-    params['KeyConditionExpression'] = "PlayerId = :PlayerId";
+    params["KeyConditionExpression"] = "yourHashKey = :v_hash";
     params['TableName'] = gameId;
     params['FilterExpression']= "PlayerId IN ("+Object.keys(obSearch).toString()+ ")";
-    params['ExpressionAttributeValues'] = obSearch;
+    params['ExpressionAttributeValues'] = `:v_hash = ${arr}`;
   }
   docClient.query(params, function(err, data) {
     if (err) {
