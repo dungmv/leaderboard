@@ -41,11 +41,6 @@ router.post('/:gameId',async (req, res, next)=>{
       }
   });
 });
-router.get('/:gameId',async (req, res, next)=>{
-  let gameId = req.params.gameId;
-  let isGlobal = req.body.IsGlobal;
-
-});
 router.get('/getBestScore/:gameId',async (req, res, next)=>{
   let playerId = req.query.PlayerId;
   let gameId = req.params.gameId;
@@ -68,6 +63,33 @@ router.get('/getBestScore/:gameId',async (req, res, next)=>{
           console.log("Query succeeded.");
           res.json({ err: 0, msg: 'ok', response: data });
       }
+  });  
+});
+router.get('/getLeaderBoard/:gameId',async (req,res,next)=>{
+  let gameId = req.params.gameId;
+  let listFriend = req.body.ListFriend;
+  let params  = {}; 
+  if(!listFriend){
+
+  }else{
+    let obSearch = {};
+    let arr = listFriend.split(',');
+    arr.map((item,index)=>{
+      let id = ":userId"+index+1;
+      obSearch[id] = item;
+    });
+    params['TableName'] = gameId;
+    params['FilterExpression']= "PlayerId IN ("+Object.keys(obSearch).toString()+ ")";
+    params['ExpressionAttributeValues'] = obSearch;
+  }
+  docClient.query(params, function(err, data) {
+    if (err) {
+        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+        res.json({ err: 1, msg: err });
+    } else {
+        console.log("Query succeeded.");
+        res.json({ err: 0, msg: 'ok', response: data });
+    }
   });  
 });
 
