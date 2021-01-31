@@ -75,9 +75,11 @@ router.get('/getLeaderBoard/:gameId',async (req,res,next)=>{
     let obSearch = {};
     let arr = listFriend.split(',');
     arr.map((item,index)=>{
-      let id = ":userId"+(parseInt(index)+1);
+      let id = ":PlayerId"+(parseInt(index)+1);
       obSearch[id] = item;
     });
+    console.log('a ',Object.keys(obSearch).toString());
+    console.log('b ',obSearch);
     params['TableName'] = gameId;
     params['FilterExpression']= "PlayerId IN ("+Object.keys(obSearch).toString()+ ")";
     params['ExpressionAttributeValues'] = obSearch;
