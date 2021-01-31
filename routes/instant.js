@@ -33,17 +33,42 @@ router.post('/:gameId',async (req, res, next)=>{
   await docClient.update(params, function(err, data) {
       if (err) {
           console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-          res.json({ err: 0, msg: 'ok', entries: records });
+          res.json({ err: 1, msg: err });
       } else {
           console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-          res.json({ err: 1, msg: err });
+          res.json({ err: 0, msg: 'ok', entries: records });
+          
       }
   });
 });
 router.get('/:gameId',async (req, res, next)=>{
   let gameId = req.params.gameId;
-  let isGlobal = req.body.isGlobal;
+  let isGlobal = req.body.IsGlobal;
 
+});
+router.get('/getBestScore/:gameId',async (req, res, next)=>{
+  let playerId = req.params.PlayerId;
+  let gameId = req.params.gameId;
+  var params = {
+    TableName : gameId,
+    KeyConditionExpression: "#p = :playid",
+    ExpressionAttributeNames:{
+        "#y": "Player"
+    },
+    ExpressionAttributeValues: {
+        ":playid": playerId
+    }
+  };
+
+  docClient.query(params, function(err, data) {
+      if (err) {
+          console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+          res.json({ err: 1, msg: err });
+      } else {
+          console.log("Query succeeded.");
+          res.json({ err: 0, msg: 'ok', response: data });
+      }
+  });  
 });
 
 
