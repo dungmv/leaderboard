@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/:id', async (req, res, next) => {
-  const client = new MongoClient(config.db.uri, { useUnifiedTophttps://lb.dozo.vn/ology: true });
+  const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
   try {
     await client.connect();
     const database = client.db('leaderboards');
