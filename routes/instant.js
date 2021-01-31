@@ -78,9 +78,9 @@ router.get('/getLeaderBoard/:gameId',async (req,res,next)=>{
       let id = ":PlayerId"+(parseInt(index)+1);
       obSearch[id] = item;
     });
-    console.log('a ',Object.keys(obSearch).toString());
-    console.log('b ',obSearch);
-    params['KeyConditionExpression'] = "PlayerId";
+    // console.log('a ',Object.keys(obSearch).toString());
+    // console.log('b ',obSearch);
+    params['KeyConditionExpression'] = "PlayerId IN ("+Object.keys(obSearch).toString()+ ")";
     params['TableName'] = gameId;
     params['FilterExpression']= "PlayerId IN ("+Object.keys(obSearch).toString()+ ")";
     params['ExpressionAttributeValues'] = obSearch;
