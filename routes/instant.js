@@ -5,8 +5,8 @@ var AWS = require("aws-sdk");
 
 let docClient = new AWS.DynamoDB.DocumentClient({
   region: "ap-southeast-1",
-  accessKeyId: "AKIAZEVXB3T77TTEXA5N",
-  secretAccessKey: "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",
+  accessKeyId: "AKIAZEVXB3T7UOHEVJ55",
+  secretAccessKey: "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",
   endpoint: "dynamodb.ap-southeast-1.amazonaws.com"
 });
 const errorFormat = (e) => {
