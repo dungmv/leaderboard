@@ -6,91 +6,62 @@ var AWS = require("aws-sdk");
 const errorFormat = (e) => {
   return e.message;
 }
-router.post('/:gameId',async (req, res, next)=>{
-  let timeUpdate = new Date();
-  let gameId = req.params.gameId;
-  let playerId = req.body.PlayerId; 
-  let point =  req.body.Point;
-  var params = {
-      TableName:gameId,
-      Key:{
-          "PlayerId": playerId
-      },
-      UpdateExpression: "set Point = :p,TimeAddPoint = :t",
-      ExpressionAttributeValues:{
-          ":p":point,
-          ":t":timeUpdate.getTime()
-      },
-      ReturnValues:"UPDATED_NEW"
-  };
-  
-  await docClient.update(params, function(err, data) {
-      if (err) {
-          console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
-          res.json({ err: 1, msg: err });
-      } else {
-          console.log("UpdateItem succeeded:", JSON.stringify(data, null, 2));
-          res.json({ err: 0, msg: 'ok', entries: data });
-          
-      }
-  });
-});
-router.get('/getBestScore/:gameId',async (req, res, next)=>{
-  let playerId = req.query.PlayerId;
-  let gameId = req.params.gameId;
-  var params = {
-    TableName : gameId,
-    KeyConditionExpression: "#PlayerId = :playid",
-    ExpressionAttributeNames:{
-        "#PlayerId": "PlayerId"
-    },
-    ExpressionAttributeValues: {
-        ":playid": playerId
-    }
-  };
-
-  docClient.query(params, function(err, data) {
-      if (err) {
-          console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-          res.json({ err: 1, msg: err });
-      } else {
-          console.log("Query succeeded.");
-          res.json({ err: 0, msg: 'ok', response: data });
-      }
-  });  
-});
-router.get('/getLeaderBoard/:gameId',async (req,res,next)=>{
-  let gameId = req.params.gameId;
-  let listFriend = req.body.ListFriend;
-  let params  = {}; 
-  if(!listFriend){
-
-  }else{
-    let obSearch = {};
-    let arr = listFriend.split(',');
-    arr.map((item,index)=>{
-      let id = ":PlayerId"+(parseInt(index)+1);
-      obSearch[id] = item;
-    });
-    // console.log('a ',Object.keys(obSearch).toString());
-    // console.log('b ',obSearch);
-    obSearch[':user'] = "userInstant";
-    params['TableName'] = gameId;
-    params["KeyConditionExpression"] = "PlayerId = :user";
-    params['FilterExpression']= "PlayerId IN ("+Object.keys(obSearch).toString()+ ")";
-    params['ExpressionAttributeValues'] = obSearch;
+router.post('/:id', async (req, res, next) => {
+  const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db('leaderboards');
+    const collection = database.collection(`Instant_${req.params.id}`);
+    const leaderboardId = new ObjectID(req.params.id);
+    const userId = req.body.userId;
+    const score = parseInt(req.body.score);
+    const name = req.body.name;
+    const photo = req.body.photo;
+    await collection.updateOne(
+      { lbid: leaderboardId, user_id: userId },
+      { $set: {score, username: name, photo, user_id: userId, updated_at: new Date()} },
+      { upsert: true }
+    );
+    res.json({ err: 0, msg: 'ok' });
+  } catch (e) {
+    res.json({ err: 1, msg: errorFormat(e) });
+  } finally {
+    client.close();
   }
-  docClient.query(params, function(err, data) {
-    if (err) {
-        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-        res.json({ err: 1, msg: err });
-    } else {
-        console.log("Query succeeded.");
-        res.json({ err: 0, msg: 'ok', response: data });
-    }
-  });  
+})
+router.get('/:id',async(req,res,next)=>{
+  const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+
+  try {
+    await client.connect();
+    const database = client.db('leaderboards');
+    const collection = database.collection(`Instant_${req.params.id}`);
+    const leaderboardId = new ObjectID(req.params.id);
+    let friendList = req.body.friendList;
+    let records = await collection.find({ lbid: leaderboardId , user_id: { $in: friendList } }).toArray();
+    res.json({ err: 0, msg: 'ok', entries: records });
+} catch (e) {
+    consores.json({ err: 1, msg: errorFormat(e) });
+    if (callback) callback([]);
+} finally {
+    client.close();
+}
 });
-
-
+router.get('/:id', async (req, res, next) => {
+  const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db('leaderboards');
+    const collection = database.collection(`Instant_${req.params.id}`);
+    const leaderboardId = new ObjectID(req.params.id);
+    const cursor = collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(25);
+    const records = await cursor.toArray();
+    res.json({ err: 0, msg: 'ok', entries: records });
+  } catch (e) {
+    res.json({ err: 1, msg: errorFormat(e) });
+  } finally {
+    client.close();
+  }
+})
 
 module.exports = router;
