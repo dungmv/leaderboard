@@ -9,6 +9,10 @@ const errorFormat = (e) => {
 }
 router.post('/:id', async (req, res, next) => {
   const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+  console.log(req.params);
+  console.log(req.body);
+  console.log(req.query);
+  console.log(req.params);
   try {
     await client.connect();
     const database = client.db('leaderboards');
