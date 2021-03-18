@@ -14,13 +14,13 @@ router.post('/:id', async (req, res, next) => {
     await client.connect();
     const database = client.db('leaderboards');
     const collection = database.collection(`Instant_${id}`);
-    console.log('collection   ',collection);
     const leaderboardId = new ObjectID(id);
     const userId = req.body.userId;
     const score = parseInt(req.body.score);
     const name = req.body.name;
     const photo = req.body.photo;
-    await collection.updateOne(
+    // await collection.updateOne(
+    await collection.insertOne(
       { lbid: leaderboardId, user_id: userId },
       { $set: {score, username: name, photo, user_id: userId, updated_at: new Date()} },
       { upsert: true }
