@@ -9,12 +9,12 @@ const errorFormat = (e) => {
 }
 router.post('/:id', async (req, res, next) => {
   const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-  let id = req.params.id.toString();
+  let idCollection = `Instant_`+req.params.id.toString();
   try {
     await client.connect();
     const database = client.db('leaderboards');
-    const collection = database.collection(`Instant_${id}`);
-    const leaderboardId = new ObjectID(id);
+    const collection = database.collection(idCollection);
+    const leaderboardId = new ObjectID(req.params.id);
     const userId = req.body.userId;
     const score = parseInt(req.body.score);
     const name = req.body.name;
