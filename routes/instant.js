@@ -1,5 +1,6 @@
 const { MongoClient, ObjectID } = require('mongodb');
 const express = require('express');
+const config = require('../config');
 const router = express.Router();
 var AWS = require("aws-sdk");
 
