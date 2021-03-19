@@ -41,7 +41,7 @@ router.get('/:id',async(req,res,next)=>{
     const collection = database.collection(idCollection);
     const leaderboardId = new ObjectID(req.params.id);
     // const friendList = req.body.friendList;
-    const records = null;
+    let records = null;
     // if(friendList ){
     //   records = await collection.find({ lbid: leaderboardId , user_id: { $in: friendList } }).toArray();
     // }else{
