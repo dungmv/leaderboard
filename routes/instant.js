@@ -9,7 +9,7 @@ const errorFormat = (e) => {
 }
 router.post('/:id', async (req, res, next) => {
   const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-  let idCollection = `Instant_`+req.params.id.toString();
+  let idCollection = `Instant_`+req.params.id;
   try {
     await client.connect();
     const database = client.db('leaderboards');
@@ -19,8 +19,8 @@ router.post('/:id', async (req, res, next) => {
     const score = parseInt(req.body.score);
     const name = req.body.name;
     const photo = req.body.photo;
-    // await collection.updateOne(
-    await collection.insertOne(
+    await collection.updateOne(
+    // await collection.insertOne(
       { lbid: leaderboardId, user_id: userId },
       { $set: {score, username: name, photo, user_id: userId, updated_at: new Date()} },
       { upsert: true }
@@ -34,11 +34,11 @@ router.post('/:id', async (req, res, next) => {
 })
 router.get('/:id',async(req,res,next)=>{
   const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-
+  let idCollection = `Instant_`+req.params.id;
   try {
     await client.connect();
     const database = client.db('leaderboards');
-    const collection = database.collection(`Instant_${req.params.id}`);
+    const collection = database.collection(idCollection);
     const leaderboardId = new ObjectID(req.params.id);
     let friendList = req.body.friendList;
     let records = await collection.find({ lbid: leaderboardId , user_id: { $in: friendList } }).toArray();
@@ -52,10 +52,11 @@ router.get('/:id',async(req,res,next)=>{
 });
 router.get('/:id', async (req, res, next) => {
   const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+  let idCollection = `Instant_`+req.params.id;
   try {
     await client.connect();
     const database = client.db('leaderboards');
-    const collection = database.collection(`Instant_${req.params.id}`);
+    const collection = database.collection(idCollection);
     const leaderboardId = new ObjectID(req.params.id);
     const cursor = collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(25);
     const records = await cursor.toArray();

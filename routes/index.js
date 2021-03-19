@@ -21,7 +21,6 @@ router.get('/', async (req, res, next) => {
   } finally {
     client.close();
   }
-
 });
 
 router.post('/', async (req, res) => {
@@ -45,7 +44,6 @@ router.post('/:id', async (req, res, next) => {
     await client.connect();
     const database = client.db('leaderboards');
     const collection = database.collection('records');
-    console.log('req.params.id   ',req.params.id);
     const leaderboardId = new ObjectID(req.params.id);
     const userId = req.body.userId;
     const score = parseInt(req.body.score);
