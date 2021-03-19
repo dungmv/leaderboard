@@ -42,7 +42,7 @@ router.get('/:id',async(req,res,next)=>{
     const leaderboardId = new ObjectID(req.params.id);
     const friendList = req.body.friendList;
     const records = null;
-    if(friendList){
+    if(friendList && friendList.length != 0){
       records = await collection.find({ lbid: leaderboardId , user_id: { $in: friendList } }).toArray();
     }else{
       records = await collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(25);
