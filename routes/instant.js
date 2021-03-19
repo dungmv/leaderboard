@@ -52,6 +52,9 @@ router.post('/:id', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
   let idCollection = `Instant_`+req.params.id;
+  console.log('req.query   ',req.query);
+  console.log('req.params   ',req.params);
+  console.log('req.body   ',req.body);
   try {
     await client.connect();
     const database = client.db('leaderboards');
