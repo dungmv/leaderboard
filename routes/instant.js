@@ -50,7 +50,6 @@ router.get('/:id',async(req,res,next)=>{
     res.json({ err: 0, msg: 'ok', entries: records });
 } catch (e) {
     res.json({ err: 1, msg: errorFormat(e) });
-    if (callback) callback([]);
 } finally {
     client.close();
 }
