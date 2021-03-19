@@ -57,7 +57,8 @@ router.get('/:id', async (req, res, next) => {
     const database = client.db('leaderboards');
     const collection = database.collection(idCollection);
     const leaderboardId = new ObjectID(req.params.id);
-    let friendList = (req.body.friendList)? req.body.friendList.split(',') : null;
+    console.log('req.query.friendList   ',req.query.friendList);
+    let friendList = (req.query.friendList)? req.query.friendList.split(',') : null;
     let records = {};
     if(friendList && friendList.length != 0){
       console.log('check friend');
