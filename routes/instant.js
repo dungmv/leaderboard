@@ -40,8 +40,13 @@ router.get('/:id',async(req,res,next)=>{
     const database = client.db('leaderboards');
     const collection = database.collection(idCollection);
     const leaderboardId = new ObjectID(req.params.id);
-    let friendList = req.body.friendList;
-    let records = await collection.find({ lbid: leaderboardId , user_id: { $in: friendList } }).toArray();
+    const friendList = req.body.friendList;
+    const records = null;
+    if(friendList){
+      records = await collection.find({ lbid: leaderboardId , user_id: { $in: friendList } }).toArray();
+    }else{
+      records = await collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(25);
+    }
     res.json({ err: 0, msg: 'ok', entries: records });
 } catch (e) {
     consores.json({ err: 1, msg: errorFormat(e) });
@@ -50,22 +55,5 @@ router.get('/:id',async(req,res,next)=>{
     client.close();
 }
 });
-router.get('/:id', async (req, res, next) => {
-  const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-  let idCollection = `Instant_`+req.params.id;
-  try {
-    await client.connect();
-    const database = client.db('leaderboards');
-    const collection = database.collection(idCollection);
-    const leaderboardId = new ObjectID(req.params.id);
-    const cursor = collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(25);
-    const records = await cursor.toArray();
-    res.json({ err: 0, msg: 'ok', entries: records });
-  } catch (e) {
-    res.json({ err: 1, msg: errorFormat(e) });
-  } finally {
-    client.close();
-  }
-})
 
 module.exports = router;
