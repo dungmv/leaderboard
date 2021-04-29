@@ -69,7 +69,7 @@ router.get('/:id', async (req, res, next) => {
     const database = client.db('leaderboards');
     const collection = database.collection('records');
     const leaderboardId = new ObjectID(req.params.id);
-    const cursor = collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(25);
+    const cursor = collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(10);
     const records = await cursor.toArray();
     res.json({ err: 0, msg: 'ok', entries: records });
   } catch (e) {
