@@ -17,9 +17,11 @@ var test = async function() {
         let friendList = (req.query.friendList)? req.query.friendList.split(',') : null;
         let records = await collection.find({ lbid: leaderboardId }).toArray();
         console.log(records.length);
-        res.json({ err: 0, msg: 'ok', entries: records });
+        // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
-        res.json({ err: 1, msg: errorFormat(e) });
+
+        console.log('errr ',e);
+        // res.json({ err: 1, msg: errorFormat(e) });
     } finally {
         client.close();
     }
