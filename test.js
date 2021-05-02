@@ -17,6 +17,19 @@ var test = async function() {
         let records = await collection.find({}).toArray();
         console.log(records.length);
         console.log(records[0]);
+        for (let index = 0; index < records.length; index++) {
+            let element = records[index];
+            if(element.lbid =='5f552458db096a3ebd469155'){
+                obStoreDataGame["5f552458db096a3ebd469155"].push(element);
+            }else if(element.lbid =='5f714415630b9b9ff8146f15'){
+                obStoreDataGame["5f714415630b9b9ff8146f15"].push(element);
+            }else if(element.lbid =='5f714415630b9b9ff8146f17'){
+                obStoreDataGame["5f714415630b9b9ff8146f17"].push(element);
+            }
+        }
+        console.log('5f552458db096a3ebd469155    ',obStoreDataGame['5f552458db096a3ebd469155'].length);
+        console.log('5f714415630b9b9ff8146f15    ',obStoreDataGame['5f714415630b9b9ff8146f15'].length);
+        console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
         
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
