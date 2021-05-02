@@ -11,11 +11,10 @@ var test = async function() {
     try {
         await client.connect();
         const database = client.db('leaderboards');
-        const collection = database.collection(idCollection);
-        const leaderboardId = new ObjectID(req.params.id);
+        const collection = database.collection('records');
+        // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
-        let friendList = (req.query.friendList)? req.query.friendList.split(',') : null;
-        let records = await collection.find({ lbid: leaderboardId }).toArray();
+        let records = await collection.find({}).toArray();
         console.log(records.length);
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
