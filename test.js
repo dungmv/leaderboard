@@ -31,7 +31,7 @@ var test = async function() {
         console.log('5f714415630b9b9ff8146f15    ',obStoreDataGame['5f714415630b9b9ff8146f15'].length);
         console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
         const fs = require('fs');
-        fs.writeFile("UserData", JSON.stringify(obStoreDataGame), function(err) {
+        fs.writeFile("UserData.json", JSON.stringify(obStoreDataGame), function(err) {
             if(err) {
                 return console.log(err);
             }
