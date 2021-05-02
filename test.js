@@ -16,6 +16,8 @@ var test = async function() {
         // console.log('req.query.friendList   ',req.query.friendList);
         let records = await collection.find({}).toArray();
         console.log(records.length);
+        console.log(records[0]);
+        
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
 
