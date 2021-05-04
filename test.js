@@ -39,9 +39,10 @@ var test = async function() {
     console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
     console.log('Total  : ',obStoreDataGame['5f552458db096a3ebd469155'].length+ obStoreDataGame['5f714415630b9b9ff8146f15'].length+obStoreDataGame['5f714415630b9b9ff8146f17'].length)
     
+    const client1 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
     try {
-        await client.connect();
-        const database = client.db('leaderboards');
+        await client1.connect();
+        const database = client1.db('leaderboards');
         const collection = database.collection('5f552458db096a3ebd469155');
         // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
@@ -54,11 +55,13 @@ var test = async function() {
         console.log('errr ',e);
         // res.json({ err: 1, msg: errorFormat(e) });
     } finally {
-        client.close();
+        client1.close();
     }
+
+    const client2 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
     try {
-        await client.connect();
-        const database = client.db('leaderboards');
+        await client2.connect();
+        const database = client2.db('leaderboards');
         const collection = database.collection('5f714415630b9b9ff8146f15');
         // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
@@ -71,11 +74,13 @@ var test = async function() {
         console.log('errr ',e);
         // res.json({ err: 1, msg: errorFormat(e) });
     } finally {
-        client.close();
+        client2.close();
     }
+
+    const client3 = new MongoClient(config.db.uri, { useUnifiedTopology: true }); 
     try {
-        await client.connect();
-        const database = client.db('leaderboards');
+        await client3.connect();
+        const database = client3.db('leaderboards');
         const collection = database.collection('5f714415630b9b9ff8146f17');
         // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
@@ -88,7 +93,7 @@ var test = async function() {
         console.log('errr ',e);
         // res.json({ err: 1, msg: errorFormat(e) });
     } finally {
-        client.close();
+        client3.close();
     }
     // pushCopyUser(obStoreDataGame['5f552458db096a3ebd469155'],()=>{
     //    setTimeout(()=>{
