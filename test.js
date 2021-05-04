@@ -44,7 +44,65 @@ var test = async function() {
        setTimeout(()=>{
         pushMany('5f714415630b9b9ff8146f15',obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
                 setTimeout(()=>{
-                    pushMany('5f714415630b9b9ff8146f17',obStoreDataGame['5f714415630b9b9ff8146f17'])
+                    pushMany('5f714415630b9b9ff8146f17',obStoreDataGame['5f714415630b9b9ff8146f17'],()=>{
+
+
+                        const client1 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+                        try {
+                            await client1.connect();
+                            const database = client1.db('leaderboards');
+                            const collection = database.collection('5f552458db096a3ebd469155');
+                            // const leaderboardId = new ObjectID(req.params.id);
+                            // console.log('req.query.friendList   ',req.query.friendList);
+                            let records = await collection.find({}).toArray();
+                            console.log('client1  5f552458db096a3ebd469155   ',records.length);
+                            
+                            // res.json({ err: 0, msg: 'ok', entries: records });
+                        } catch (e) {
+                            console.log('errr ',e);
+                            // res.json({ err: 1, msg: errorFormat(e) });
+                        } finally {
+                            client1.close();
+                        }
+
+                        const client2 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+                        try {
+                            await client2.connect();
+                            const database = client2.db('leaderboards');
+                            const collection = database.collection('5f714415630b9b9ff8146f15');
+                            // const leaderboardId = new ObjectID(req.params.id);
+                            // console.log('req.query.friendList   ',req.query.friendList);
+                            let records = await collection.find({}).toArray();
+                            console.log('client2  5f714415630b9b9ff8146f15   ',records.length);
+                            
+                            // res.json({ err: 0, msg: 'ok', entries: records });
+                        } catch (e) {
+                            console.log('errr ',e);
+                            // res.json({ err: 1, msg: errorFormat(e) });
+                        } finally {
+                            client2.close();
+                        }
+
+                        const client3 = new MongoClient(config.db.uri, { useUnifiedTopology: true }); 
+                        try {
+                            await client3.connect();
+                            const database = client3.db('leaderboards');
+                            const collection = database.collection('5f714415630b9b9ff8146f17');
+                            // const leaderboardId = new ObjectID(req.params.id);
+                            // console.log('req.query.friendList   ',req.query.friendList);
+                            let records = await collection.find({}).toArray();
+                            console.log('client3  5f714415630b9b9ff8146f17   ',records.length);
+                            
+                            // res.json({ err: 0, msg: 'ok', entries: records });
+                        } catch (e) {
+                            console.log('errr ',e);
+                            // res.json({ err: 1, msg: errorFormat(e) });
+                        } finally {
+                            client3.close();
+                        }
+
+
+                    })
                 },5000);
             })
        },5000);
@@ -54,59 +112,7 @@ var test = async function() {
 
 
 
-    const client1 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-    try {
-        await client1.connect();
-        const database = client1.db('leaderboards');
-        const collection = database.collection('5f552458db096a3ebd469155');
-        // const leaderboardId = new ObjectID(req.params.id);
-        // console.log('req.query.friendList   ',req.query.friendList);
-        let records = await collection.find({}).toArray();
-        console.log('client1  5f552458db096a3ebd469155   ',records.length);
-        
-        // res.json({ err: 0, msg: 'ok', entries: records });
-    } catch (e) {
-        console.log('errr ',e);
-        // res.json({ err: 1, msg: errorFormat(e) });
-    } finally {
-        client1.close();
-    }
-
-    const client2 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-    try {
-        await client2.connect();
-        const database = client2.db('leaderboards');
-        const collection = database.collection('5f714415630b9b9ff8146f15');
-        // const leaderboardId = new ObjectID(req.params.id);
-        // console.log('req.query.friendList   ',req.query.friendList);
-        let records = await collection.find({}).toArray();
-        console.log('client2  5f714415630b9b9ff8146f15   ',records.length);
-        
-        // res.json({ err: 0, msg: 'ok', entries: records });
-    } catch (e) {
-        console.log('errr ',e);
-        // res.json({ err: 1, msg: errorFormat(e) });
-    } finally {
-        client2.close();
-    }
-
-    const client3 = new MongoClient(config.db.uri, { useUnifiedTopology: true }); 
-    try {
-        await client3.connect();
-        const database = client3.db('leaderboards');
-        const collection = database.collection('5f714415630b9b9ff8146f17');
-        // const leaderboardId = new ObjectID(req.params.id);
-        // console.log('req.query.friendList   ',req.query.friendList);
-        let records = await collection.find({}).toArray();
-        console.log('client3  5f714415630b9b9ff8146f17   ',records.length);
-        
-        // res.json({ err: 0, msg: 'ok', entries: records });
-    } catch (e) {
-        console.log('errr ',e);
-        // res.json({ err: 1, msg: errorFormat(e) });
-    } finally {
-        client3.close();
-    }
+    
     // setTimeout(()=>{
     //     console.log('Start Clonet ');
     //     let time = 0;
