@@ -39,6 +39,18 @@ var test = async function() {
     console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
     console.log('Total  : ',obStoreDataGame['5f552458db096a3ebd469155'].length+ obStoreDataGame['5f714415630b9b9ff8146f15'].length+obStoreDataGame['5f714415630b9b9ff8146f17'].length)
     
+
+    pushCopyUser(obStoreDataGame['5f552458db096a3ebd469155'],()=>{
+       setTimeout(()=>{
+            pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
+                setTimeout(()=>{
+                    pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f17'])
+
+
+                },5000);
+            })
+       },5000);
+    })
     // setTimeout(()=>{
     //     console.log('Start Clonet ');
     //     let time = 0;
@@ -53,31 +65,33 @@ var test = async function() {
     // },5000);
 }
 
-var pushCopyUser = async function(array){
+var pushCopyUser = async function(array,callBack){
+  
     let USER = array.shift();
     const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-    let idCollection = `Instant_`+req.params.id;
     try {
         await client.connect();
         const database = client.db('leaderboards');
-        const collection = database.collection(idCollection);
-        const leaderboardId = new ObjectID(req.params.id);
-        const userId = req.body.userId;
-        const score = parseInt(req.body.score);
-        const name = req.body.name;
-        const photo = req.body.photo;
+        const collection = database.collection(USER.lbid);
+        const leaderboardId = new ObjectID(USER.lbid);
         await collection.updateOne(
         // await collection.insertOne(
-        { lbid: USER.lbid, user_id: USER.user_id },
-        { $set: {score: USER.score, username: USER.name, photo:USER.photo, user_id: USER.user_id, updated_at: new Date()} },
-        { upsert: true }
+            { lbid: leaderboardId, user_id: USER.user_id },
+            { $set: {score: USER.score, username: USER.name, photo:USER.photo, user_id: USER.user_id, updated_at: new Date()} },
+            { upsert: true }
         );
         res.json({ err: 0, msg: 'ok' });
     } catch (e) {
         res.json({ err: 1, msg: errorFormat(e) });
     } finally {
         client.close();
-        pushCopyUser(array);
+        console.log('DONE USER LB ',USER.lbid,'  idUser  ',USER.user_id);
+        if(array.length == 0) {
+            console.log('DONE USER IN TAB  ',USER.lbid);
+            if(callBack) callBack();
+            return;
+        }
+        pushCopyUser(array,callBack);
     }
 };
 test();
