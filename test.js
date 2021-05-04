@@ -30,14 +30,7 @@ var test = async function() {
         console.log('5f552458db096a3ebd469155    ',obStoreDataGame['5f552458db096a3ebd469155'].length);
         console.log('5f714415630b9b9ff8146f15    ',obStoreDataGame['5f714415630b9b9ff8146f15'].length);
         console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
-        const fs = require('fs');
-        fs.writeFile("UserData.json", JSON.stringify(obStoreDataGame), function(err) {
-            if(err) {
-                return console.log(err);
-            }
-            console.log("The file was saved!");
-        }); 
-
+        console.log('Total  : ',obStoreDataGame['5f552458db096a3ebd469155'].length+ obStoreDataGame['5f714415630b9b9ff8146f15'].length+obStoreDataGame['5f714415630b9b9ff8146f17'].length)
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
 
@@ -86,7 +79,7 @@ var pushCopyUser = async function(array){
         res.json({ err: 1, msg: errorFormat(e) });
     } finally {
         client.close();
-        pushCopyUser
+        pushCopyUser(array);
     }
 };
 test();
