@@ -85,7 +85,7 @@ var pushCopyUser = async function(array,callBack){
         // res.json({ err: 1, msg: errorFormat(e) });
     } finally {
         client.close();
-        console.log('DONE USER LB ',USER.lbid,'  idUser  ',USER.user_id);
+        console.log('DONE USER LB ',USER.lbid,'  idUser  ',USER.user_id , 'size User   ',array.length);
         if(array.length == 0) {
             console.log('DONE USER IN TAB  ',USER.lbid);
             if(callBack) callBack();
