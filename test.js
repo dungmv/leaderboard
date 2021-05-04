@@ -39,18 +39,68 @@ var test = async function() {
     console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
     console.log('Total  : ',obStoreDataGame['5f552458db096a3ebd469155'].length+ obStoreDataGame['5f714415630b9b9ff8146f15'].length+obStoreDataGame['5f714415630b9b9ff8146f17'].length)
     
+    try {
+        await client.connect();
+        const database = client.db('leaderboards');
+        const collection = database.collection('5f552458db096a3ebd469155');
+        // const leaderboardId = new ObjectID(req.params.id);
+        // console.log('req.query.friendList   ',req.query.friendList);
+        let records = await collection.find({}).toArray();
+        console.log('5f552458db096a3ebd469155   ',records.length);
+        console.log(records[0]);
+        
+        // res.json({ err: 0, msg: 'ok', entries: records });
+    } catch (e) {
+        console.log('errr ',e);
+        // res.json({ err: 1, msg: errorFormat(e) });
+    } finally {
+        client.close();
+    }
+    try {
+        await client.connect();
+        const database = client.db('leaderboards');
+        const collection = database.collection('5f714415630b9b9ff8146f15');
+        // const leaderboardId = new ObjectID(req.params.id);
+        // console.log('req.query.friendList   ',req.query.friendList);
+        let records = await collection.find({}).toArray();
+        console.log('5f714415630b9b9ff8146f15   ',records.length);
+        console.log(records[0]);
+        
+        // res.json({ err: 0, msg: 'ok', entries: records });
+    } catch (e) {
+        console.log('errr ',e);
+        // res.json({ err: 1, msg: errorFormat(e) });
+    } finally {
+        client.close();
+    }
+    try {
+        await client.connect();
+        const database = client.db('leaderboards');
+        const collection = database.collection('5f714415630b9b9ff8146f17');
+        // const leaderboardId = new ObjectID(req.params.id);
+        // console.log('req.query.friendList   ',req.query.friendList);
+        let records = await collection.find({}).toArray();
+        console.log('5f714415630b9b9ff8146f17   ',records.length);
+        console.log(records[0]);
+        
+        // res.json({ err: 0, msg: 'ok', entries: records });
+    } catch (e) {
+        console.log('errr ',e);
+        // res.json({ err: 1, msg: errorFormat(e) });
+    } finally {
+        client.close();
+    }
+    // pushCopyUser(obStoreDataGame['5f552458db096a3ebd469155'],()=>{
+    //    setTimeout(()=>{
+    //         pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
+    //             setTimeout(()=>{
+    //                 pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f17'])
 
-    pushCopyUser(obStoreDataGame['5f552458db096a3ebd469155'],()=>{
-       setTimeout(()=>{
-            pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
-                setTimeout(()=>{
-                    pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f17'])
 
-
-                },5000);
-            })
-       },5000);
-    })
+    //             },5000);
+    //         })
+    //    },5000);
+    // })
     // setTimeout(()=>{
     //     console.log('Start Clonet ');
     //     let time = 0;
