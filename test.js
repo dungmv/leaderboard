@@ -80,9 +80,9 @@ var pushCopyUser = async function(array,callBack){
             { $set: {score: USER.score, username: USER.name, photo:USER.photo, user_id: USER.user_id, updated_at: new Date()} },
             { upsert: true }
         );
-        res.json({ err: 0, msg: 'ok' });
+        // res.json({ err: 0, msg: 'ok' });
     } catch (e) {
-        res.json({ err: 1, msg: errorFormat(e) });
+        // res.json({ err: 1, msg: errorFormat(e) });
     } finally {
         client.close();
         console.log('DONE USER LB ',USER.lbid,'  idUser  ',USER.user_id);
