@@ -2,7 +2,7 @@ const { MongoClient, ObjectID } = require('mongodb');
 const express = require('express');
 const config = require('../config');
 const router = express.Router();
-
+var cacheDb = {};
 const errorFormat = (e) => {
   return e.message;
 }
@@ -43,7 +43,7 @@ router.post('/:id', async (req, res, next) => {
   try {
     await client.connect();
     const database = client.db('leaderboards');
-    const collection = database.collection('records');
+    const collection = database.collection(req.params.id);
     const leaderboardId = new ObjectID(req.params.id);
     const userId = req.body.userId;
     const score = parseInt(req.body.score);
