@@ -39,6 +39,21 @@ var test = async function() {
     console.log('5f714415630b9b9ff8146f17    ',obStoreDataGame['5f714415630b9b9ff8146f17'].length);
     console.log('Total  : ',obStoreDataGame['5f552458db096a3ebd469155'].length+ obStoreDataGame['5f714415630b9b9ff8146f15'].length+obStoreDataGame['5f714415630b9b9ff8146f17'].length)
     
+   
+    pushMany('5f552458db096a3ebd469155',obStoreDataGame['5f552458db096a3ebd469155'],()=>{
+       setTimeout(()=>{
+        pushMany('5f714415630b9b9ff8146f15',obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
+                setTimeout(()=>{
+                    pushMany('5f714415630b9b9ff8146f17',obStoreDataGame['5f714415630b9b9ff8146f17'])
+                },5000);
+            })
+       },5000);
+    })
+
+
+
+
+
     const client1 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
     try {
         await client1.connect();
@@ -47,8 +62,7 @@ var test = async function() {
         // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
         let records = await collection.find({}).toArray();
-        console.log('5f552458db096a3ebd469155   ',records.length);
-        console.log(records[0]);
+        console.log('client1  5f552458db096a3ebd469155   ',records.length);
         
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
@@ -66,8 +80,7 @@ var test = async function() {
         // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
         let records = await collection.find({}).toArray();
-        console.log('5f714415630b9b9ff8146f15   ',records.length);
-        console.log(records[0]);
+        console.log('client2  5f714415630b9b9ff8146f15   ',records.length);
         
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
@@ -85,8 +98,7 @@ var test = async function() {
         // const leaderboardId = new ObjectID(req.params.id);
         // console.log('req.query.friendList   ',req.query.friendList);
         let records = await collection.find({}).toArray();
-        console.log('5f714415630b9b9ff8146f17   ',records.length);
-        console.log(records[0]);
+        console.log('client3  5f714415630b9b9ff8146f17   ',records.length);
         
         // res.json({ err: 0, msg: 'ok', entries: records });
     } catch (e) {
@@ -95,17 +107,6 @@ var test = async function() {
     } finally {
         client3.close();
     }
-    // pushCopyUser(obStoreDataGame['5f552458db096a3ebd469155'],()=>{
-    //    setTimeout(()=>{
-    //         pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
-    //             setTimeout(()=>{
-    //                 pushCopyUser(obStoreDataGame['5f714415630b9b9ff8146f17'])
-
-
-    //             },5000);
-    //         })
-    //    },5000);
-    // })
     // setTimeout(()=>{
     //     console.log('Start Clonet ');
     //     let time = 0;
@@ -119,7 +120,20 @@ var test = async function() {
         
     // },5000);
 }
-
+var pushMany = async function(id,array,callBack){
+    const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
+    try {
+        await client.connect();
+        const database = client.db('leaderboards');
+        const collection = database.collection(id);
+        await collection.insertMany(array);
+    } catch (e) {
+    } finally {
+        client.close();
+        console.log('DONE USER LB ',id,' =>>> ',array.length);
+        if(callBack) callBack();
+    }
+}
 var pushCopyUser = async function(array,callBack){
   
     let USER = array.shift();
