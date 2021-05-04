@@ -45,61 +45,11 @@ var test = async function() {
         pushMany('5f714415630b9b9ff8146f15',obStoreDataGame['5f714415630b9b9ff8146f15'],()=>{
                 setTimeout(()=>{
                     pushMany('5f714415630b9b9ff8146f17',obStoreDataGame['5f714415630b9b9ff8146f17'],()=>{
+                        check('5f552458db096a3ebd469155');
+                        check('5f714415630b9b9ff8146f15');
+                        check('5f714415630b9b9ff8146f17');
 
-
-                        const client1 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-                        try {
-                            await client1.connect();
-                            const database = client1.db('leaderboards');
-                            const collection = database.collection('5f552458db096a3ebd469155');
-                            // const leaderboardId = new ObjectID(req.params.id);
-                            // console.log('req.query.friendList   ',req.query.friendList);
-                            let records = await collection.find({}).toArray();
-                            console.log('client1  5f552458db096a3ebd469155   ',records.length);
-                            
-                            // res.json({ err: 0, msg: 'ok', entries: records });
-                        } catch (e) {
-                            console.log('errr ',e);
-                            // res.json({ err: 1, msg: errorFormat(e) });
-                        } finally {
-                            client1.close();
-                        }
-
-                        const client2 = new MongoClient(config.db.uri, { useUnifiedTopology: true });
-                        try {
-                            await client2.connect();
-                            const database = client2.db('leaderboards');
-                            const collection = database.collection('5f714415630b9b9ff8146f15');
-                            // const leaderboardId = new ObjectID(req.params.id);
-                            // console.log('req.query.friendList   ',req.query.friendList);
-                            let records = await collection.find({}).toArray();
-                            console.log('client2  5f714415630b9b9ff8146f15   ',records.length);
-                            
-                            // res.json({ err: 0, msg: 'ok', entries: records });
-                        } catch (e) {
-                            console.log('errr ',e);
-                            // res.json({ err: 1, msg: errorFormat(e) });
-                        } finally {
-                            client2.close();
-                        }
-
-                        const client3 = new MongoClient(config.db.uri, { useUnifiedTopology: true }); 
-                        try {
-                            await client3.connect();
-                            const database = client3.db('leaderboards');
-                            const collection = database.collection('5f714415630b9b9ff8146f17');
-                            // const leaderboardId = new ObjectID(req.params.id);
-                            // console.log('req.query.friendList   ',req.query.friendList);
-                            let records = await collection.find({}).toArray();
-                            console.log('client3  5f714415630b9b9ff8146f17   ',records.length);
-                            
-                            // res.json({ err: 0, msg: 'ok', entries: records });
-                        } catch (e) {
-                            console.log('errr ',e);
-                            // res.json({ err: 1, msg: errorFormat(e) });
-                        } finally {
-                            client3.close();
-                        }
+                        
 
 
                     })
@@ -125,6 +75,24 @@ var test = async function() {
     //     }
         
     // },5000);
+}
+var check = async function(id){
+    const client3 = new MongoClient(config.db.uri, { useUnifiedTopology: true }); 
+    try {
+        await client3.connect();
+        const database = client3.db('leaderboards');
+        const collection = database.collection(id);
+        // const leaderboardId = new ObjectID(req.params.id);
+        // console.log('req.query.friendList   ',req.query.friendList);
+        let records = await collection.find({}).toArray();
+        console.log('client3  ',id,' ----->  ',records.length);
+        // res.json({ err: 0, msg: 'ok', entries: records });
+    } catch (e) {
+        console.log('errr ',e);
+        // res.json({ err: 1, msg: errorFormat(e) });
+    } finally {
+        client3.close();
+    }
 }
 var pushMany = async function(id,array,callBack){
     const client = new MongoClient(config.db.uri, { useUnifiedTopology: true });
