@@ -2,7 +2,7 @@ const { MongoClient, ObjectID } = require('mongodb');
 const express = require('express');
 const config = require('../config');
 const router = express.Router();
-export var cacheDb = {};
+var cacheDb = {};
 const errorFormat = (e) => {
   return e.message;
 }
