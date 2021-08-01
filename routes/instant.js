@@ -72,6 +72,7 @@ router.get('/:id', async (req, res, next) => {
     records['global']=await collection.find({ lbid: leaderboardId }).sort({score: -1}).limit(10).toArray();
     res.json({ err: 0, msg: 'ok', entries: records });
   } catch (e) {
+    console.log('e  ',e);
     res.json({ err: 1, msg: errorFormat(e) });
   } finally {
     client.close();
